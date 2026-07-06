@@ -1,4 +1,6 @@
+import { AppError } from '../../error/appError';
 import { IUser, IUserResponse } from './user,interface';
+import httpStatus from 'http-status-codes';
 import { User } from './user.model';
 
 const createUser = async (userData: IUser): Promise<IUserResponse> => {
@@ -6,7 +8,10 @@ const createUser = async (userData: IUser): Promise<IUserResponse> => {
     const existingUser = await User.findOne({ email: userData.email });
 
     if (existingUser) {
-      throw new Error('User already exists with this email');
+      throw new AppError(
+        httpStatus.CONFLICT,
+        'User already exists with this email'
+      );
     }
 
     const user = await User.create(userData);
@@ -24,7 +29,6 @@ const createUser = async (userData: IUser): Promise<IUserResponse> => {
 
     return response;
   } catch (error) {
-    console.error('Error creating user:', error);
     throw error;
   }
 };

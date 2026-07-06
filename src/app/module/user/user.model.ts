@@ -69,19 +69,4 @@ const userSchema = new Schema<IUserDocument>(
   }
 );
 
-userSchema.methods.isPasswordMatch = async function (
-  enteredPassword: string
-): Promise<boolean> {
-  return bcrypt.compare(enteredPassword, this.password);
-};
-
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    return next();
-  }
-
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
-});
-
 export const User = model<IUserDocument>('User', userSchema);

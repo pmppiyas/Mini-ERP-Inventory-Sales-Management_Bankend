@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response } from 'express';
 
 interface DMeta {
   total: number;
@@ -17,6 +17,7 @@ const sendResponse = <D>(res: Response, data: DResponse<D>) => {
 
   res.status(data.statusCode).send({
     success: data.success,
+    statusCode: data.statusCode,
     message: data.message,
     meta: data.meta,
     data: data.data,

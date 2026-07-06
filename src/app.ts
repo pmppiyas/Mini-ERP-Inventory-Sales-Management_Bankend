@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import router from './app/routes';
+import { globalErrorHandler } from './app/middleware/globalErrorHandler';
 
 const app = express();
 
@@ -33,5 +34,7 @@ app.use((req, res, next) => {
     message: 'Route Not Found',
   });
 });
+
+app.use(globalErrorHandler);
 
 export default app;

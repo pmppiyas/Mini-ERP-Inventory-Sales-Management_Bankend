@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import http, { Server } from "http";
+import mongoose from "mongoose";
 import app from "./app";
 
 dotenv.config();
@@ -8,6 +9,14 @@ let server: Server | null = null;
 
 async function startServer() {
   try {
+    // Connect to MongoDB before starting the server
+    const dbUrl = process.env.DATABASE_URL;
+    if (!dbUrl) {
+      throw new Error("DATABASE_URL is not defined in environment variables");
+    }
+    await mongoose.connect(dbUrl);
+    console.log("✅ Connected to MongoDB");
+
     server = http.createServer(app);
     server.listen(process.env.PORT, () => {
       console.log(`🚀 Server is running on port ${process.env.PORT}`);
@@ -32,6 +41,8 @@ async function gracefulShutdown(signal: string) {
       console.log("✅ HTTP server closed.");
 
       try {
+        await mongoose.disconnect();
+        console.log("✅ MongoDB connection closed.");
         console.log("Server shutdown complete.");
       } catch (error) {
         console.error("❌ Error during shutdown:", error);
