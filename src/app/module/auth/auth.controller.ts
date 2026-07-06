@@ -6,6 +6,8 @@ import sendResponse from '../../utils/sendResponse';
 import { AppError } from '../../error/appError';
 import { setAuthCookie } from '../../utils/setCookie';
 import { createUserToken } from '../../utils/Token';
+import { JwtPayload } from 'jsonwebtoken';
+import { AuthService } from './auth.services';
 
 const credentialsLogin = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -35,6 +37,22 @@ const credentialsLogin = catchAsync(
   }
 );
 
+const getMe = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = req.user as JwtPayload;
+    const userId = user?.userId;
+    const data = await AuthService.getMe(userId as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Self get Successfully',
+      data: data,
+    });
+  }
+);
+
 export const AuthController = {
   credentialsLogin,
+  getMe,
 };
