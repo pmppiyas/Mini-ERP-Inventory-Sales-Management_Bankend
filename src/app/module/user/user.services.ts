@@ -2,6 +2,7 @@ import { AppError } from '../../error/appError';
 import { IUser, IUserResponse } from './user,interface';
 import httpStatus from 'http-status-codes';
 import { User } from './user.model';
+import { hashingPassword } from '../../utils/hashingPassword';
 
 const createUser = async (userData: IUser): Promise<IUserResponse> => {
   try {
@@ -13,6 +14,9 @@ const createUser = async (userData: IUser): Promise<IUserResponse> => {
         'User already exists with this email'
       );
     }
+
+    const hashedPassword = await hashingPassword(userData.password);
+    userData.password = hashedPassword;
 
     const user = await User.create(userData);
 

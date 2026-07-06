@@ -1,6 +1,10 @@
 import { Document } from 'mongoose';
 
-export type Role = 'ADMIN' | 'MANAGER' | 'EMPLOYEE';
+export enum Role {
+  ADMIN = 'ADMIN',
+  MANAGER = 'MANAGER',
+  EMPLOYEE = 'EMPLOYEE',
+}
 
 export interface IAuths {
   provider: string;
@@ -11,7 +15,6 @@ export enum IsActive {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   BLOCK = 'BLOCK',
-  EMPLOYEE = 'EMPLOYEE',
 }
 
 export interface IUser {

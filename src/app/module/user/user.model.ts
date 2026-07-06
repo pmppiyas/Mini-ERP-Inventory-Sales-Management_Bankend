@@ -1,6 +1,6 @@
 import mongoose, { Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
-import { IAuths, IsActive, IUserDocument } from './user,interface';
+import { IAuths, IsActive, Role, IUserDocument } from './user,interface';
 
 mongoose.set('strictQuery', false);
 
@@ -49,8 +49,8 @@ const userSchema = new Schema<IUserDocument>(
     },
     role: {
       type: String,
-      enum: Object.values(IsActive),
-      default: IsActive.EMPLOYEE,
+      enum: Object.values(Role),
+      default: Role.EMPLOYEE,
     },
 
     auths: {

@@ -3,7 +3,11 @@ import { ZodTypeAny } from 'zod';
 
 export const validateRequest =
   (schema: ZodTypeAny) =>
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (
+    req: Request & { file?: Express.Multer.File },
+    res: Response,
+    next: NextFunction
+  ) => {
     try {
       if (!req.body || Object.keys(req.body).length === 0) {
         return res.status(400).json({
