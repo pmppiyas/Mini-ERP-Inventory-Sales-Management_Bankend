@@ -1,24 +1,7 @@
 import mongoose, { Schema, model } from 'mongoose';
-import bcrypt from 'bcrypt';
-import { IAuths, IsActive, Role, IUserDocument } from './user,interface';
+import { IsActive, Role, IUserDocument } from './user,interface';
 
 mongoose.set('strictQuery', false);
-
-const authSchema = new Schema<IAuths>(
-  {
-    provider: {
-      type: String,
-      required: true,
-    },
-    providerId: {
-      type: String,
-      required: true,
-    },
-  },
-  {
-    _id: false,
-  }
-);
 
 const userSchema = new Schema<IUserDocument>(
   {
@@ -41,7 +24,6 @@ const userSchema = new Schema<IUserDocument>(
       required: function (this: any) {
         return !this.auths || this.auths.length === 0;
       },
-      select: false,
     },
 
     profileImage: {
@@ -53,11 +35,6 @@ const userSchema = new Schema<IUserDocument>(
       default: Role.EMPLOYEE,
     },
 
-    auths: {
-      type: [authSchema],
-      default: [],
-    },
-
     status: {
       type: String,
       enum: Object.values(IsActive),
@@ -66,6 +43,7 @@ const userSchema = new Schema<IUserDocument>(
   },
   {
     timestamps: true,
+    versionKey: false,
   }
 );
 
