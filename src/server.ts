@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
-import http, { Server } from "http";
-import mongoose from "mongoose";
-import app from "./app";
+import dotenv from 'dotenv';
+import http, { Server } from 'http';
+import mongoose from 'mongoose';
+import app from './app';
 
 dotenv.config();
 
@@ -9,13 +9,12 @@ let server: Server | null = null;
 
 async function startServer() {
   try {
-    // Connect to MongoDB before starting the server
     const dbUrl = process.env.DATABASE_URL;
     if (!dbUrl) {
-      throw new Error("DATABASE_URL is not defined in environment variables");
+      throw new Error('DATABASE_URL is not defined in environment variables');
     }
     await mongoose.connect(dbUrl);
-    console.log("✅ Connected to MongoDB");
+    console.log('✅ Connected to MongoDB');
 
     server = http.createServer(app);
     server.listen(process.env.PORT, () => {
@@ -24,7 +23,7 @@ async function startServer() {
 
     handleProcessEvents();
   } catch (error) {
-    console.error("❌ Error during server startup:", error);
+    console.error('❌ Error during server startup:', error);
     process.exit(1);
   }
 }
@@ -38,14 +37,14 @@ async function gracefulShutdown(signal: string) {
 
   if (server) {
     server.close(async () => {
-      console.log("✅ HTTP server closed.");
+      console.log('✅ HTTP server closed.');
 
       try {
         await mongoose.disconnect();
-        console.log("✅ MongoDB connection closed.");
-        console.log("Server shutdown complete.");
+        console.log('✅ MongoDB connection closed.');
+        console.log('Server shutdown complete.');
       } catch (error) {
-        console.error("❌ Error during shutdown:", error);
+        console.error('❌ Error during shutdown:', error);
       }
 
       process.exit(0);
@@ -59,19 +58,18 @@ async function gracefulShutdown(signal: string) {
  * Handle system signals and unexpected errors.
  */
 function handleProcessEvents() {
-  process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
-  process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
-  process.on("uncaughtException", (error) => {
-    console.error("💥 Uncaught Exception:", error);
-    gracefulShutdown("uncaughtException");
+  process.on('uncaughtException', (error) => {
+    console.error('💥 Uncaught Exception:', error);
+    gracefulShutdown('uncaughtException');
   });
 
-  process.on("unhandledRejection", (reason) => {
-    console.error("💥 Unhandled Rejection:", reason);
-    gracefulShutdown("unhandledRejection");
+  process.on('unhandledRejection', (reason) => {
+    console.error('💥 Unhandled Rejection:', reason);
+    gracefulShutdown('unhandledRejection');
   });
 }
 
-// Start the application
 startServer();

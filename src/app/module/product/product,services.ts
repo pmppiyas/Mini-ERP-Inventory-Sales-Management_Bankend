@@ -4,7 +4,7 @@ import { AppError } from '../../error/appError';
 import httpStatus from 'http-status-codes';
 import { Types } from 'mongoose';
 import { IJwtPayload } from '../../interface';
-import { QueryBuilder } from '../../utils/QueryBuilder';
+import { QueryBuilder } from '../../utils/queryBuilder';
 
 const addProduct = async (
   productData: IProduct,
@@ -58,7 +58,7 @@ const allProducts = async (
   ]);
 
   return {
-    products: data,
+    products: data as unknown as IProductResponse[],
     meta,
   };
 };
