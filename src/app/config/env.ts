@@ -9,6 +9,9 @@ export const ENV = {
   BCRYPT: {
     SALT_NUMBER: process.env.SALT_NUMBER as string,
   },
+
+  FRONTEND_URL: process.env.FRONTEND_URL as string,
+
   JWT: {
     ACCESS_TOKEN: process.env.ACCESS_TOKEN as string,
     ACCESS_EXPIRED: process.env.ACCESS_EXPIRED as string,

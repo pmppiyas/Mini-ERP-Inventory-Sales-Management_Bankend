@@ -18,7 +18,7 @@ export const globalErrorHandler = (
     });
   }
 
-  console.error('Global Error Handler:', err);
+  // console.error('Global Error Handler:', err);
 
   res.status(statusCode).json({
     success: false,
