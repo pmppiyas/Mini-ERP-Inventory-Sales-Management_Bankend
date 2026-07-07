@@ -4,10 +4,10 @@ import passport from 'passport';
 import httpStatus from 'http-status-codes';
 import sendResponse from '../../utils/sendResponse';
 import { AppError } from '../../error/appError';
-import { setAuthCookie } from '../../utils/setCookie';
-import { createUserToken } from '../../utils/Token';
+import { clearAuthCookies, setAuthCookie } from '../../utils/cookies';
 import { JwtPayload } from 'jsonwebtoken';
 import { AuthService } from './auth.services';
+import { createUserToken } from '../../utils/token';
 
 const credentialsLogin = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -52,7 +52,20 @@ const getMe = catchAsync(
   }
 );
 
+const logout = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    clearAuthCookies(res);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Logout successfully',
+      data: null,
+    });
+  }
+);
+
 export const AuthController = {
   credentialsLogin,
   getMe,
+  logout,
 };

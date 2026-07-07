@@ -9,4 +9,6 @@ router.post('/login', AuthController.credentialsLogin);
 
 router.get('/getme', checkAuth(...Object.values(Role)), AuthController.getMe);
 
+router.post('/logout', AuthController.logout);
+
 export const AuthRoutes = router;
