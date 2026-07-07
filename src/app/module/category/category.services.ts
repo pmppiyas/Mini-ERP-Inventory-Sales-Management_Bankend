@@ -116,6 +116,33 @@ const getAllCategories = async () => {
   return categoryTree;
 };
 
+const updateCategory = async (payload: {
+  name: string;
+  categoryId?: string;
+  parentId?: string;
+  MODE: 'EDIT' | 'MOVE';
+}) => {
+  const { name, categoryId, parentId, MODE } = payload;
+
+  if (MODE === 'EDIT') {
+    const category = await Category.findByIdAndUpdate(
+      categoryId,
+      { name },
+      { new: true }
+    );
+    return category;
+  }
+
+  if (MODE === 'MOVE') {
+    const category = await Category.findByIdAndUpdate(
+      categoryId,
+      { parentId },
+      { new: true }
+    );
+    return category;
+  }
+};
+
 export const CategoryServices = {
   addCategory,
   getAllCategories,

@@ -16,4 +16,11 @@ router.post(
 
 router.get('/all', CategoryController.getAllCategories);
 
+router.put(
+  '/update',
+  checkAuth(Role.ADMIN, Role.MANAGER),
+  validateRequest(updateCategorySchema),
+  CategoryController.updateCategory
+);
+
 export const CategoryRoutes = router;
