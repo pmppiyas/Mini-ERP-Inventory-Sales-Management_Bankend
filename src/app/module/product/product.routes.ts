@@ -5,12 +5,22 @@ import { Role } from '../user/user,interface';
 
 const router = Router();
 
-router.post('/add', checkAuth(Role.ADMIN), ProductController.addProduct);
+router.post(
+  '/add',
+  checkAuth(Role.ADMIN, Role.MANAGER),
+  ProductController.addProduct
+);
 
 router.put(
   '/:productId',
   checkAuth(Role.ADMIN, Role.MANAGER),
   ProductController.updateProduct
+);
+
+router.delete(
+  '/:productId',
+  checkAuth(Role.ADMIN, Role.MANAGER),
+  ProductController.deleteProduct
 );
 
 export const ProductRoutes = router;

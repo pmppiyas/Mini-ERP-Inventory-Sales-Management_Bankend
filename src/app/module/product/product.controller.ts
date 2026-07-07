@@ -41,7 +41,23 @@ const updateProduct = catchAsync(
   }
 );
 
+const deleteProduct = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    await ProductService.deleteProduct(
+      req.params.productId,
+      req.user as IJwtPayload
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Product deleted successfully',
+    });
+  }
+);
+
 export const ProductController = {
   addProduct,
   updateProduct,
+  deleteProduct,
 };

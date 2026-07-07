@@ -8,7 +8,7 @@ interface DResponse<D> {
   statusCode: number;
   success: boolean;
   message: string;
-  data: D;
+  data?: D;
   meta?: DMeta;
 }
 

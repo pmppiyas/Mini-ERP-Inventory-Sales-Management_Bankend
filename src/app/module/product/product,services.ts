@@ -95,7 +95,25 @@ const updateProduct = async (
   };
 };
 
+const deleteProduct = async (
+  productId: string,
+  deleter: IJwtPayload
+): Promise<void> => {
+  if (!Types.ObjectId.isValid(productId)) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Invalid product ID');
+  }
+
+  const isProductExist = await Product.findById(productId);
+
+  if (!isProductExist) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+
+  await Product.findByIdAndDelete(productId);
+};
+
 export const ProductService = {
   addProduct,
   updateProduct,
+  deleteProduct,
 };
