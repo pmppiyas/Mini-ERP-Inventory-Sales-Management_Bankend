@@ -11,6 +11,12 @@ router.post(
   ProductController.addProduct
 );
 
+router.get(
+  '/',
+  checkAuth(Role.ADMIN, Role.MANAGER, Role.EMPLOYEE),
+  ProductController.allProducts
+);
+
 router.put(
   '/:productId',
   checkAuth(Role.ADMIN, Role.MANAGER),

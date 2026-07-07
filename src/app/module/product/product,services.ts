@@ -4,6 +4,7 @@ import { AppError } from '../../error/appError';
 import httpStatus from 'http-status-codes';
 import { Types } from 'mongoose';
 import { IJwtPayload } from '../../interface';
+import { QueryBuilder } from '../../utils/QueryBuilder';
 
 const addProduct = async (
   productData: IProduct,
@@ -36,6 +37,29 @@ const addProduct = async (
     createdBy: product.createdBy.toString(),
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
+  };
+};
+
+const allProducts = async (
+  query: Record<string, string> = {}
+): Promise<{ products: IProductResponse[]; meta: any }> => {
+  const searchableFields = ['name', 'sku', 'category'];
+
+  const queryBuilder = new QueryBuilder<IProduct>(Product.find(), query)
+    .filter()
+    .search(searchableFields)
+    .sort()
+    .fields()
+    .paginate();
+
+  const [data, meta] = await Promise.all([
+    queryBuilder.build(),
+    queryBuilder.getMeta(),
+  ]);
+
+  return {
+    products: data,
+    meta,
   };
 };
 
@@ -114,6 +138,7 @@ const deleteProduct = async (
 
 export const ProductService = {
   addProduct,
+  allProducts,
   updateProduct,
   deleteProduct,
 };
