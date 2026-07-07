@@ -3,6 +3,7 @@ import { IUser, IUserResponse } from './user,interface';
 import httpStatus from 'http-status-codes';
 import { User } from './user.model';
 import { hashingPassword } from '../../utils/hashingPassword';
+import { QueryBuilder } from '../../utils/queryBuilder';
 
 const createUser = async (userData: IUser): Promise<IUserResponse> => {
   try {
@@ -37,6 +38,28 @@ const createUser = async (userData: IUser): Promise<IUserResponse> => {
   }
 };
 
+const getAllUsers = async (query: Record<string, string> = {}) => {
+  const searchableFields = ['name'];
+
+  const queryBuilder = new QueryBuilder<IUser>(User.find(), query)
+    .filter()
+    .search(searchableFields)
+    .sort()
+    .fields()
+    .paginate();
+
+  const [data, meta] = await Promise.all([
+    queryBuilder.build(),
+    queryBuilder.getMeta(),
+  ]);
+
+  return {
+    users: data as unknown as IUserResponse[],
+    meta,
+  };
+};
+
 export const UserService = {
   createUser,
+  getAllUsers,
 };
