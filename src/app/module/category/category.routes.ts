@@ -2,7 +2,10 @@ import { checkAuth } from '../../middleware/checkAuth';
 import { validateRequest } from '../../middleware/validateRequest';
 import { Router } from 'express';
 import { Role } from '../user/user,interface';
-import { createCategorySchema } from './category.validation';
+import {
+  createCategorySchema,
+  updateCategorySchema,
+} from './category.validation';
 import { CategoryController } from './category.controller';
 
 const router = Router();
@@ -22,5 +25,7 @@ router.put(
   validateRequest(updateCategorySchema),
   CategoryController.updateCategory
 );
+
+router.delete('/:id', checkAuth(Role.ADMIN), CategoryController.deleteCategory);
 
 export const CategoryRoutes = router;
