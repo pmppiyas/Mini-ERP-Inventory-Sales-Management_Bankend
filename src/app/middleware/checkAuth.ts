@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import httpStatus from 'http-status-codes';
-
 import { Types } from 'mongoose';
 import { AppError } from '../error/appError';
-import { verifyToken } from '../utils/Token';
 import { ENV } from '../config/env';
-import { JwtPayload } from 'jsonwebtoken';
+import { verifyToken } from '../utils/token';
 import { User } from '../module/user/user.model';
-import { IsActive } from '../module/user/user,interface';
-export const checkAuth = (...authRoles: string[]) => {
+import { IsActive, Role } from '../module/user/user,interface';
+import { IJwtPayload } from '../interface';
+
+export const checkAuth = (...authRoles: Role[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const accessToken =
@@ -21,7 +21,7 @@ export const checkAuth = (...authRoles: string[]) => {
       const verifiedToken = verifyToken(
         accessToken,
         ENV.JWT.ACCESS_TOKEN
-      ) as JwtPayload;
+      ) as IJwtPayload;
 
       if (!authRoles.includes(verifiedToken.role)) {
         throw new AppError(

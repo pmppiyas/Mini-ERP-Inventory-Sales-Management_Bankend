@@ -1,14 +1,15 @@
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 export interface IProduct {
+  productData: import("mongoose").Schema.Types.ObjectId;
   name: string;
   sku: string;
   category: string;
   purchasePrice: number;
   sellingPrice: number;
   stockQuantity: number;
-  productImage: string;
-  createdBy: string;
+  productImage?: string;
+  createdBy: Types.ObjectId;
 }
 
 export interface IProductResponse {
@@ -19,7 +20,7 @@ export interface IProductResponse {
   purchasePrice: number;
   sellingPrice: number;
   stockQuantity: number;
-  productImage: string;
+  productImage?: string;
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;

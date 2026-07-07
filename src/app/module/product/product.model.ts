@@ -44,11 +44,10 @@ const productSchema = new Schema<IProductDocument>(
 
     productImage: {
       type: String,
-      required: true,
     },
 
     createdBy: {
-      type: Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: 'User',
       required: true,
     },

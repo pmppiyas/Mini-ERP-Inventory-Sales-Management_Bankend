@@ -6,13 +6,13 @@ import httpStatus from 'http-status-codes';
 
 const createUser = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const User = await UserService.createUser(req.body);
+    const user = await UserService.createUser(req.body);
 
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.CREATED,
       message: 'User create successfully',
-      data: User,
+      data: user,
     });
   }
 );
