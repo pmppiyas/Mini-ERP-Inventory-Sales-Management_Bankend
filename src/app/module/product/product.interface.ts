@@ -1,10 +1,10 @@
 import { Document, Types } from 'mongoose';
 
 export interface IProduct {
-  productData: import("mongoose").Schema.Types.ObjectId;
+  productData: import('mongoose').Schema.Types.ObjectId;
   name: string;
   sku: string;
-  category: string;
+  category: Types.ObjectId;
   purchasePrice: number;
   sellingPrice: number;
   stockQuantity: number;
@@ -16,7 +16,7 @@ export interface IProductResponse {
   _id: string;
   name: string;
   sku: string;
-  category: string;
+  category: Types.ObjectId;
   purchasePrice: number;
   sellingPrice: number;
   stockQuantity: number;

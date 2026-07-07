@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { Types } from 'mongoose';
 
 export const addProductValidationSchema = z.object({
   name: z
@@ -13,8 +14,9 @@ export const addProductValidationSchema = z.object({
 
   category: z
     .string({ error: 'Category is required' })
-    .trim()
-    .min(2, { message: 'Category must be at least 2 characters' }),
+    .refine((value) => Types.ObjectId.isValid(value), {
+      message: 'Invalid category ID',
+    }),
 
   purchasePrice: z
     .number({ error: 'Purchase price is required' })

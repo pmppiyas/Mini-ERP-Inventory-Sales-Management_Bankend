@@ -18,7 +18,8 @@ const productSchema = new Schema<IProductDocument>(
     },
 
     category: {
-      type: String,
+      type: Types.ObjectId,
+      ref: 'Product',
       required: true,
       trim: true,
     },
