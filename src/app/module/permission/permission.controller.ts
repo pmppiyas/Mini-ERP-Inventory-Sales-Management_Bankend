@@ -27,6 +27,27 @@ const setPermission = catchAsync(
   }
 );
 
+const removePermission = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId, type }: { userId: Types.ObjectId; type: Permission[] } =
+      req.body;
+
+    const permission = await PermissionServices.removePermission(
+      req.user as IJwtPayload,
+      userId,
+      type
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: 'Permission set successfully',
+      data: permission,
+    });
+  }
+);
+
 export const PermissionController = {
   setPermission,
+  removePermission,
 };

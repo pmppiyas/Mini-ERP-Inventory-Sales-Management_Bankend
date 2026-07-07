@@ -76,6 +76,76 @@ const setPermission = async (
   }
 };
 
+const removePermission = async (
+  remover: IJwtPayload,
+  userId: Types.ObjectId,
+  type: Permission[]
+) => {
+  const ADMIN = remover.role === 'ADMIN';
+  const MANAGER = remover.role === 'MANAGER';
+
+  const MANAGER_AUTHORITY = type.every((permission) =>
+    managerGiveablePermissions.includes(permission)
+  );
+
+  const USER = await User.findById(userId);
+
+  if (!USER) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found!');
+  }
+
+  if (ADMIN) {
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: {
+          permissions: {
+            $in: type,
+          },
+        },
+      },
+      {
+        returnDocument: 'after',
+        runValidators: true,
+      }
+    );
+
+    return updatedUser;
+  }
+
+  if (MANAGER && MANAGER_AUTHORITY) {
+    if (USER.role !== 'EMPLOYEE') {
+      throw new AppError(
+        StatusCodes.FORBIDDEN,
+        'Manager can only remove permissions from employees.'
+      );
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        $pull: {
+          permissions: {
+            $in: type,
+          },
+        },
+      },
+      {
+        returnDocument: 'after',
+        runValidators: true,
+      }
+    );
+
+    return updatedUser;
+  }
+
+  throw new AppError(
+    StatusCodes.UNAUTHORIZED,
+    'You are not permitted for this action!'
+  );
+};
+
 export const PermissionServices = {
   setPermission,
+  removePermission,
 };
