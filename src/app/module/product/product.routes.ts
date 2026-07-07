@@ -2,12 +2,15 @@ import { Router } from 'express';
 import { ProductController } from './product.controller';
 import { checkAuth } from '../../middleware/checkAuth';
 import { Role } from '../user/user,interface';
+import { validateRequest } from '../../middleware/validateRequest';
+import { addProductValidationSchema } from './product.validation';
 
 const router = Router();
 
 router.post(
   '/add',
   checkAuth(Role.ADMIN, Role.MANAGER),
+  validateRequest(addProductValidationSchema),
   ProductController.addProduct
 );
 
@@ -26,6 +29,7 @@ router.get(
 router.put(
   '/:productId',
   checkAuth(Role.ADMIN, Role.MANAGER),
+  validateRequest(addProductValidationSchema.partial()),
   ProductController.updateProduct
 );
 
