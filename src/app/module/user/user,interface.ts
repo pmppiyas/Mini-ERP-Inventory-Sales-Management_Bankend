@@ -1,4 +1,5 @@
 import { Document } from 'mongoose';
+import { Permission } from '../permission/permission.constant';
 
 export enum Role {
   ADMIN = 'ADMIN',
@@ -25,6 +26,7 @@ export interface IUser {
   role: Role;
   auths: IAuths[];
   status: IsActive;
+  permissions: Permission[];
 }
 
 export interface IUserResponse {

@@ -1,5 +1,6 @@
 import mongoose, { Schema, model } from 'mongoose';
 import { IsActive, Role, IUserDocument } from './user,interface';
+import { Permission, rolePermissions } from '../permission/permission.constant';
 
 mongoose.set('strictQuery', false);
 
@@ -40,11 +41,23 @@ const userSchema = new Schema<IUserDocument>(
       enum: Object.values(IsActive),
       default: IsActive.ACTIVE,
     },
+
+    permissions: {
+      type: [String],
+      enum: Object.values(Permission),
+      default: [],
+    },
   },
   {
     timestamps: true,
     versionKey: false,
   }
 );
+
+userSchema.pre('save', function (next) {
+  if (!this.permissions || this.permissions.length === 0) {
+    this.permissions = rolePermissions[this.role] || [];
+  }
+});
 
 export const User = model<IUserDocument>('User', userSchema);
