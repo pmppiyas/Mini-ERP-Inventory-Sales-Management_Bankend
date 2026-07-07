@@ -27,7 +27,7 @@ const userSchema = new Schema<IUserDocument>(
       },
     },
 
-    profileImage: {
+    photoUrl: {
       type: String,
     },
     role: {

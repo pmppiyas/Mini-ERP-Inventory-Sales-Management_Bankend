@@ -19,9 +19,8 @@ const productSchema = new Schema<IProductDocument>(
 
     category: {
       type: Types.ObjectId,
-      ref: 'Product',
+      ref: 'Category',
       required: true,
-      trim: true,
     },
 
     purchasePrice: {
@@ -43,7 +42,7 @@ const productSchema = new Schema<IProductDocument>(
       min: 0,
     },
 
-    productImage: {
+    photoUrl: {
       type: String,
     },
 

@@ -22,7 +22,7 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  profileImage?: string;
+  photoUrl?: string;
   role: Role;
   auths: IAuths[];
   status: IsActive;
@@ -33,7 +33,7 @@ export interface IUserResponse {
   _id: string;
   name: string;
   email: string;
-  profileImage?: string;
+  photoUrl?: string;
   role: Role;
   status: IsActive;
   createdAt: Date;

@@ -8,7 +8,7 @@ export interface IProduct {
   purchasePrice: number;
   sellingPrice: number;
   stockQuantity: number;
-  productImage?: string;
+  photoUrl?: string;
   createdBy: Types.ObjectId;
 }
 
@@ -20,7 +20,7 @@ export interface IProductResponse {
   purchasePrice: number;
   sellingPrice: number;
   stockQuantity: number;
-  productImage?: string;
+  photoUrl?: string;
   createdBy: string;
   createdAt: Date;
   updatedAt: Date;

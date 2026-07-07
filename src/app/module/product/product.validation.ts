@@ -30,9 +30,4 @@ export const addProductValidationSchema = z.object({
     .number({ error: 'Stock quantity is required' })
     .int({ message: 'Stock quantity must be an integer' })
     .min(0, { message: 'Stock quantity cannot be negative' }),
-
-  productImage: z
-    .string({ error: 'Product image is required' })
-    .trim()
-    .min(1, { message: 'Product image is required' }),
 });

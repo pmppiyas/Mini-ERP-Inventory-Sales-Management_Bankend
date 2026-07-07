@@ -44,6 +44,7 @@ export const validateRequest =
           'Zod validation failed:',
           JSON.stringify(parsed.error.issues, null, 2)
         );
+
         return res.status(400).json({
           success: false,
           message: parsed.error.issues[0].message,
@@ -55,7 +56,6 @@ export const validateRequest =
 
       if (req.file) {
         req.body.photoUrl = req.file.path;
-        req.body.photoPublicId = req.file.filename;
       }
 
       next();
