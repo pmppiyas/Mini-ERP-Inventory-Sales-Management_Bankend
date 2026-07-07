@@ -17,6 +17,12 @@ router.get(
   ProductController.allProducts
 );
 
+router.get(
+  '/:productId',
+  checkAuth(Role.ADMIN, Role.MANAGER, Role.EMPLOYEE),
+  ProductController.getProductById
+);
+
 router.put(
   '/:productId',
   checkAuth(Role.ADMIN, Role.MANAGER),

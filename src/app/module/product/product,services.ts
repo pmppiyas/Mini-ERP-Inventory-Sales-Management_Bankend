@@ -40,6 +40,32 @@ const addProduct = async (
   };
 };
 
+const getProductById = async (productId: string): Promise<IProductResponse> => {
+  if (!Types.ObjectId.isValid(productId)) {
+    throw new AppError(httpStatus.BAD_REQUEST, 'Invalid product ID');
+  }
+
+  const product = await Product.findById(productId);
+
+  if (!product) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Product not found');
+  }
+
+  return {
+    _id: product._id.toString(),
+    name: product.name,
+    sku: product.sku,
+    category: product.category,
+    purchasePrice: product.purchasePrice,
+    sellingPrice: product.sellingPrice,
+    stockQuantity: product.stockQuantity,
+    productImage: product.productImage,
+    createdBy: product.createdBy.toString(),
+    createdAt: product.createdAt,
+    updatedAt: product.updatedAt,
+  };
+};
+
 const allProducts = async (
   query: Record<string, string> = {}
 ): Promise<{ products: IProductResponse[]; meta: any }> => {
@@ -139,6 +165,7 @@ const deleteProduct = async (
 export const ProductService = {
   addProduct,
   allProducts,
+  getProductById,
   updateProduct,
   deleteProduct,
 };
