@@ -84,6 +84,39 @@ const addCategory = async (payload: {
   }
 };
 
+const buildCategoryTree = (
+  categories: ICategory[],
+  parentId: string | null = null
+): ICategory[] => {
+  const categoryList: any[] = [];
+
+  const filteredCategories =
+    parentId === null
+      ? categories.filter((cat) => cat.parentId == null)
+      : categories.filter((cat) => String(cat.parentId) === String(parentId));
+
+  for (const cat of filteredCategories) {
+    categoryList.push({
+      _id: cat._id,
+      name: cat.name,
+      slug: cat.slug,
+      parentId: cat.parentId,
+      children: buildCategoryTree(categories, String(cat._id)),
+    });
+  }
+
+  return categoryList;
+};
+
+const getAllCategories = async () => {
+  const categories = await Category.find().lean();
+
+  const categoryTree = buildCategoryTree(categories);
+
+  return categoryTree;
+};
+
 export const CategoryServices = {
   addCategory,
+  getAllCategories,
 };
