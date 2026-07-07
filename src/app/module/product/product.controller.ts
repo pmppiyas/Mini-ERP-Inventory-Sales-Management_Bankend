@@ -4,6 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status-codes';
 import { ProductService } from './product,services';
 import { Types } from 'mongoose';
+import { IJwtPayload } from '../../interface';
 
 const addProduct = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -23,6 +24,24 @@ const addProduct = catchAsync(
   }
 );
 
+const updateProduct = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const product = await ProductService.updateProduct(
+      req.params.productId,
+      req.body,
+      req.user as IJwtPayload
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Product updated successfully',
+      data: product,
+    });
+  }
+);
+
 export const ProductController = {
   addProduct,
+  updateProduct,
 };
