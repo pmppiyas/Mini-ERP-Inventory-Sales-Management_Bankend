@@ -12,9 +12,6 @@ passport.use(
 
     async (identifier: string, password: string, done: any) => {
       try {
-        console.log('Email=>', identifier);
-        console.log('Password:=>', password);
-
         const isUserExist = await User.findOne({ email: identifier });
 
         if (!isUserExist) {

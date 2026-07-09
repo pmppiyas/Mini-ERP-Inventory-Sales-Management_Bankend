@@ -31,6 +31,7 @@ router.get(
 router.put(
   '/:productId',
   checkAuth(Role.ADMIN, Role.MANAGER),
+  multerUpload.single('image'),
   validateRequest(addProductValidationSchema.partial()),
   ProductController.updateProduct
 );

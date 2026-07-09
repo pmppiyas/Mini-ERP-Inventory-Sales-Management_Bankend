@@ -5,11 +5,14 @@ import httpStatus from 'http-status-codes';
 import { Types } from 'mongoose';
 import { IJwtPayload } from '../../interface';
 import { QueryBuilder } from '../../utils/queryBuilder';
+import { Category } from '../category/category.model';
 
 const addProduct = async (
   productData: IProduct,
   createdBy: Types.ObjectId
 ): Promise<IProductResponse> => {
+  console.log(productData);
+
   const isProductExist = await Product.findOne({
     sku: productData.sku,
   });
@@ -45,7 +48,12 @@ const getProductById = async (productId: string): Promise<IProductResponse> => {
     throw new AppError(httpStatus.BAD_REQUEST, 'Invalid product ID');
   }
 
-  const product = await Product.findById(productId);
+  const product = await Product.findById(productId).populate([
+    {
+      path: 'category',
+      select: 'name slug',
+    },
+  ]);
 
   if (!product) {
     throw new AppError(httpStatus.NOT_FOUND, 'Product not found');
@@ -69,6 +77,16 @@ const getProductById = async (productId: string): Promise<IProductResponse> => {
 const allProducts = async (
   query: Record<string, string> = {}
 ): Promise<{ products: IProductResponse[]; meta: any }> => {
+  if (query.category) {
+    const category = await Category.findOne({
+      slug: query.category,
+    }).select('_id');
+
+    if (category) {
+      query.category = category._id.toString();
+    }
+  }
+
   const searchableFields = ['name', 'sku', 'category'];
 
   const queryBuilder = new QueryBuilder<IProduct>(Product.find(), query)
@@ -76,7 +94,13 @@ const allProducts = async (
     .search(searchableFields)
     .sort()
     .fields()
-    .paginate();
+    .paginate()
+    .populate([
+      {
+        path: 'category',
+        select: 'name slug',
+      },
+    ]);
 
   const [data, meta] = await Promise.all([
     queryBuilder.build(),
