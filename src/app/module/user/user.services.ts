@@ -1,6 +1,6 @@
 import { AppError } from '../../error/appError';
 import { IUser, IUserResponse } from './user,interface';
-import httpStatus from 'http-status-codes';
+import httpStatus, { StatusCodes } from 'http-status-codes';
 import { User } from './user.model';
 import { hashingPassword } from '../../utils/hashingPassword';
 import { QueryBuilder } from '../../utils/queryBuilder';
@@ -59,7 +59,17 @@ const getAllUsers = async (query: Record<string, string> = {}) => {
   };
 };
 
+const getUserById = async (id: string) => {
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found!');
+  }
+  return user;
+};
+
 export const UserService = {
   createUser,
   getAllUsers,
+  getUserById,
 };

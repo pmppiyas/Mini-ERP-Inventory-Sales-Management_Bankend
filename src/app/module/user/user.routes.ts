@@ -18,4 +18,10 @@ router.post(
 
 router.get('/', checkAuth(...Object.values(Role)), UserController.getAllUsers);
 
+router.get(
+  '/:id',
+  checkAuth(...Object.values(Role)),
+  UserController.getUserById
+);
+
 export const UserRoutes = router;
