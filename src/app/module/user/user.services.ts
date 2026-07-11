@@ -68,8 +68,19 @@ const getUserById = async (id: string) => {
   return user;
 };
 
+const deleteUser = async (id: string) => {
+  const user = await User.findById(id);
+
+  if (!user) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'User not found!');
+  }
+
+  return await User.findByIdAndDelete(id);
+};
+
 export const UserService = {
   createUser,
   getAllUsers,
   getUserById,
+  deleteUser,
 };

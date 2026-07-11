@@ -24,4 +24,9 @@ router.get(
   UserController.getUserById
 );
 
+router.delete(
+  '/:id',
+  checkAuth(Role.ADMIN, Role.MANAGER),
+  UserController.deleteUser
+);
 export const UserRoutes = router;
