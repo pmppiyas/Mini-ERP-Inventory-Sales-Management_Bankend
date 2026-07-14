@@ -23,6 +23,7 @@ export interface IUser {
   email: string;
   password: string;
   photoUrl?: string;
+  phone?: string;
   role: Role;
   auths: IAuths[];
   status: IsActive;
@@ -33,9 +34,11 @@ export interface IUserResponse {
   _id: string;
   name: string;
   email: string;
+  phone?: string;
   photoUrl?: string;
   role: Role;
   status: IsActive;
+  permissions: Permission[];
   createdAt: Date;
   updatedAt: Date;
 }

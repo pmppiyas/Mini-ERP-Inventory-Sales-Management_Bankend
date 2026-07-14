@@ -27,6 +27,10 @@ const userSchema = new Schema<IUserDocument>(
       },
     },
 
+    phone: {
+      type: String,
+    },
+
     photoUrl: {
       type: String,
     },

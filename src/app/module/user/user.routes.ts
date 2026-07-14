@@ -1,7 +1,10 @@
 import { Router } from 'express';
 import { UserController } from './user.controller';
 import { validateRequest } from '../../middleware/validateRequest';
-import { registerValidationSchema } from './user.validation';
+import {
+  registerValidationSchema,
+  updateUserValidationSchema,
+} from './user.validation';
 import { checkAuth } from '../../middleware/checkAuth';
 import { Role } from './user,interface';
 import { multerUpload } from '../../config/multer.config';
@@ -24,9 +27,17 @@ router.get(
   UserController.getUserById
 );
 
+router.patch(
+  '/:id',
+  checkAuth(...Object.values(Role)),
+  validateRequest(updateUserValidationSchema),
+  UserController.updateUser
+);
+
 router.delete(
   '/:id',
   checkAuth(Role.ADMIN, Role.MANAGER),
   UserController.deleteUser
 );
+
 export const UserRoutes = router;
