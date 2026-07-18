@@ -19,8 +19,8 @@ router.post(
 
 router.get('/all', CategoryController.getAllCategories);
 
-router.put(
-  '/update',
+router.patch(
+  '/',
   checkAuth(Role.ADMIN, Role.MANAGER),
   validateRequest(updateCategorySchema),
   CategoryController.updateCategory

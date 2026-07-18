@@ -4,6 +4,7 @@ import { AuthRoutes } from '../module/auth/auth.routes';
 import { ProductRoutes } from '../module/product/product.routes';
 import { PermissionRoutes } from '../module/permission/permission.routes';
 import { CategoryRoutes } from '../module/category/category.routes';
+import { SellRoutes } from '../module/sell/sell.routes';
 
 const router = Router();
 
@@ -32,6 +33,10 @@ const moduleRoutes: IModuleRoutes[] = [
   {
     path: '/permission',
     route: PermissionRoutes,
+  },
+  {
+    path: '/sell',
+    route: SellRoutes,
   },
 ];
 
