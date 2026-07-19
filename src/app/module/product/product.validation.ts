@@ -22,7 +22,7 @@ export const addProductValidationSchema = z.object({
     .number({ error: 'Purchase price is required' })
     .min(0, { message: 'Purchase price cannot be negative' }),
 
-  sellingPrice: z
+  SellingPrice: z
     .number({ error: 'Selling price is required' })
     .min(0, { message: 'Selling price cannot be negative' }),
 

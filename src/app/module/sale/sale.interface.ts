@@ -10,6 +10,17 @@ export interface ISale {
   updatedAt?: Date;
 }
 
+export interface ISaleResponse {
+  _id: string;
+  sellerId: Types.ObjectId;
+  productId: Types.ObjectId;
+  quantity: number;
+  sellingPrice: number;
+  totalAmount: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export interface ICreateSalePayload {
   id: string;
   quantity: number;

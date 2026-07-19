@@ -1,9 +1,9 @@
 import { Schema, model, Types } from 'mongoose';
-import { ISaleDocument } from './sell.interface';
+import { ISaleDocument } from './sale.interface';
 
 const saleSchema = new Schema<ISaleDocument>(
   {
-    sellerId: {
+    salerId: {
       type: Types.ObjectId,
       ref: 'User',
       required: true,
@@ -21,7 +21,7 @@ const saleSchema = new Schema<ISaleDocument>(
       min: 1,
     },
 
-    sellingPrice: {
+    SellingPrice: {
       type: Number,
       required: true,
       min: 0,

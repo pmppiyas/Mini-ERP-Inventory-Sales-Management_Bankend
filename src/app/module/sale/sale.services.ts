@@ -1,9 +1,10 @@
 import { IJwtPayload } from '../../interface';
-import { ICreateSalePayload } from './sell.interface';
+import { ICreateSalePayload, ISale, ISaleResponse } from './sale.interface';
 import { Product } from '../product/product.model';
 import { Sale } from './sale.model';
+import { QueryBuilder } from '../../utils/queryBuilder';
 
-const createSell = async (
+const createSale = async (
   seller: IJwtPayload,
   products: ICreateSalePayload[]
 ) => {
@@ -42,6 +43,27 @@ const createSell = async (
   return sales;
 };
 
-export const SellServices = {
-  createSell,
+const getSales = async (query: Record<string, string> = {}) => {
+  console.log(query);
+
+  const queryBuilder = new QueryBuilder<ISale>(Sale.find(), query)
+    .filter()
+    .sort()
+    .fields()
+    .paginate();
+
+
+  const [data, meta] = await Promise.all([
+    queryBuilder.build(),
+    queryBuilder.getMeta(),
+  ]);
+  return {
+    sales: data as unknown as ISaleResponse[],
+    meta,
+  };
+};
+
+export const SaleServices = {
+  createSale,
+  getSales,
 };
