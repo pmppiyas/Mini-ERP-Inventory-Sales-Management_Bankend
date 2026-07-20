@@ -3,7 +3,7 @@ import { ISaleDocument } from './sale.interface';
 
 const saleSchema = new Schema<ISaleDocument>(
   {
-    salerId: {
+    sellerId: {
       type: Types.ObjectId,
       ref: 'User',
       required: true,
@@ -21,7 +21,7 @@ const saleSchema = new Schema<ISaleDocument>(
       min: 1,
     },
 
-    SellingPrice: {
+    sellingPrice: {
       type: Number,
       required: true,
       min: 0,

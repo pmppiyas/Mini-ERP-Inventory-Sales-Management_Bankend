@@ -29,7 +29,7 @@ const productSchema = new Schema<IProductDocument>(
       min: 0,
     },
 
-    SellingPrice: {
+    sellingPrice: {
       type: Number,
       required: true,
       min: 0,

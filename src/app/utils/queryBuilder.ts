@@ -3,9 +3,12 @@ import { Query } from 'mongoose';
 export const excludeFilterFields = [
   'searchTerm',
   'sort',
+  'sortBy',
   'fields',
   'page',
   'limit',
+  'fromDate',
+  'toDate',
 ];
 
 export class QueryBuilder<T> {
@@ -74,11 +77,14 @@ export class QueryBuilder<T> {
   }
 
   sort(): this {
+    const sortParam = (this.query.sort || this.query.sortBy) as string;
     const sort =
-      (this.query.sort as string)?.split(',').join(' ') || '-createdAt';
-
+      sortParam
+        ?.split(',')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0)
+        .join(' ') || 'createdAt';
     this.modelQuery = this.modelQuery.sort(sort);
-
     return this;
   }
 
@@ -112,6 +118,39 @@ export class QueryBuilder<T> {
         select: field.select,
       });
     });
+
+    return this;
+  }
+
+  dateRange(dateField: string = 'createdAt'): this {
+    const fromDate = this.query.fromDate as string | undefined;
+    const toDate = this.query.toDate as string | undefined;
+
+    if (!fromDate && !toDate) return this;
+
+    const dateFilter: Record<string, unknown> = {};
+
+    if (fromDate) {
+      const from = new Date(fromDate);
+      if (!isNaN(from.getTime())) {
+        from.setUTCHours(0, 0, 0, 0);
+        dateFilter['$gte'] = from;
+      }
+    }
+
+    if (toDate) {
+      const to = new Date(toDate);
+      if (!isNaN(to.getTime())) {
+        to.setUTCHours(23, 59, 59, 999);
+        dateFilter['$lte'] = to;
+      }
+    }
+
+    if (Object.keys(dateFilter).length > 0) {
+      const rangeFilter = { [dateField]: dateFilter };
+      this.appliedFilters = { ...this.appliedFilters, ...rangeFilter };
+      this.modelQuery = this.modelQuery.find(rangeFilter);
+    }
 
     return this;
   }

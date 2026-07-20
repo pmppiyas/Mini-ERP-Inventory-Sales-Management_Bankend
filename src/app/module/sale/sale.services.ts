@@ -44,14 +44,22 @@ const createSale = async (
 };
 
 const getSales = async (query: Record<string, string> = {}) => {
-  console.log(query);
-
   const queryBuilder = new QueryBuilder<ISale>(Sale.find(), query)
     .filter()
+    .dateRange('createdAt')
     .sort()
     .fields()
-    .paginate();
-
+    .paginate()
+    .populate([
+      {
+        path: 'sellerId',
+        select: 'name email photoUrl',
+      },
+      {
+        path: 'productId',
+        select: '_id name photoUrl sellingPrice',
+      },
+    ]);
 
   const [data, meta] = await Promise.all([
     queryBuilder.build(),

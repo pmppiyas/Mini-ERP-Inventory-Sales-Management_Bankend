@@ -7,7 +7,7 @@ export interface IProduct {
   sku: string;
   category: ICategory;
   purchasePrice: number;
-  SellingPrice: number;
+  sellingPrice: number;
   stockQuantity: number;
   photoUrl?: string;
   createdBy: Types.ObjectId;
@@ -19,7 +19,7 @@ export interface IProductResponse {
   sku: string;
   category: ICategory;
   purchasePrice: number;
-  SellingPrice: number;
+  sellingPrice: number;
   stockQuantity: number;
   photoUrl?: string;
   createdBy: string;
