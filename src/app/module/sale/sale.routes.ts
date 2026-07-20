@@ -18,4 +18,10 @@ router.post(
 
 router.get('/', checkAuth(...Object.values(Role)), SaleController.getSales);
 
+router.get(
+  '/:id',
+  checkAuth(...Object.values(Role)),
+  SaleController.getSaleById
+);
+
 export const SaleRoutes = router;

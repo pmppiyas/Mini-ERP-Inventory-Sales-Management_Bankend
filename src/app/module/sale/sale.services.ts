@@ -71,7 +71,18 @@ const getSales = async (query: Record<string, string> = {}) => {
   };
 };
 
+const getSalebyId = async (id: string) => {
+  return await Sale.findById(id).populate([
+    { path: 'sellerId', select: '_id name email' },
+    {
+      path: 'productId',
+      select: '_id name photoUrl',
+    },
+  ]);
+};
+
 export const SaleServices = {
   createSale,
   getSales,
+  getSalebyId,
 };

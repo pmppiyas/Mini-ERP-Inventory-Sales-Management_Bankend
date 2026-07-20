@@ -35,7 +35,21 @@ const getSales = catchAsync(
   }
 );
 
+const getSaleById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const sale = await SaleServices.getSalebyId(req?.params?.id);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: 'Sale by Id retrieved successfully',
+      data: sale,
+    });
+  }
+);
+
 export const SaleController = {
   createSale,
   getSales,
+  getSaleById,
 };
