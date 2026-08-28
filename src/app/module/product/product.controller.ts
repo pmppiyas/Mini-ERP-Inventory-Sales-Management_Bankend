@@ -26,6 +26,7 @@ const addProduct = catchAsync(
 
 const allProducts = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log('Query=>', req.query);
     const product = await ProductService.allProducts(
       req.query as Record<string, string>
     );

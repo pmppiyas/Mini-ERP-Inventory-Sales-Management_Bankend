@@ -6,6 +6,7 @@ import { Types } from 'mongoose';
 import { IJwtPayload } from '../../interface';
 import { QueryBuilder } from '../../utils/queryBuilder';
 import { Category } from '../category/category.model';
+import { Sale } from '../sale/sale.model';
 
 const addProduct = async (
   productData: IProduct,
@@ -76,7 +77,54 @@ const getProductById = async (productId: string): Promise<IProductResponse> => {
 
 const allProducts = async (
   query: Record<string, string> = {}
-): Promise<{ products: IProductResponse[]; meta: any }> => {
+): Promise<{ products: IProductResponse[] | any[]; meta: any }> => {
+  if (query.status === 'top_selling') {
+    const data = await Sale.aggregate([
+      {
+        $group: {
+          _id: '$productId',
+          totalQuantitySold: { $sum: '$quantity' },
+          totalRevenue: { $sum: '$totalAmount' },
+        },
+      },
+      { $sort: { totalQuantitySold: -1 } },
+      { $limit: 5 },
+      {
+        $lookup: {
+          from: 'products',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'product',
+        },
+      },
+      { $unwind: { path: '$product', preserveNullAndEmptyArrays: true } },
+      {
+        $project: {
+          _id: '$product._id',
+          name: '$product.name',
+          sku: '$product.sku',
+          sellingPrice: '$product.sellingPrice',
+          stockQuantity: '$product.stockQuantity',
+          photoUrl: '$product.photoUrl',
+          totalQuantitySold: 1,
+          totalRevenue: 1,
+        },
+      },
+    ]);
+
+    return { products: data, meta: { total: data.length } };
+  }
+
+  if (query.status === 'low_stock') {
+    const data = await Product.find({ stockQuantity: { $lte: 5 } })
+      .select('name sku stockQuantity sellingPrice photoUrl category')
+      .populate({ path: 'category', select: 'name slug' })
+      .sort({ stockQuantity: 1 })
+      .lean();
+
+    return { products: data as any[], meta: { total: data.length } };
+  }
+
   if (query.category) {
     const category = await Category.findOne({
       slug: query.category,
@@ -87,7 +135,7 @@ const allProducts = async (
     }
   }
 
-  const searchableFields = ['name', 'sku', 'category'];
+  const searchableFields = ['name', 'sku'];
 
   const queryBuilder = new QueryBuilder<IProduct>(Product.find(), query)
     .filter()

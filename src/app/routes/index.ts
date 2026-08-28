@@ -5,6 +5,7 @@ import { ProductRoutes } from '../module/product/product.routes';
 import { PermissionRoutes } from '../module/permission/permission.routes';
 import { CategoryRoutes } from '../module/category/category.routes';
 import { SaleRoutes } from '../module/sale/sale.routes';
+import { MetaRoutes } from '../module/meta/meta.routes';
 
 const router = Router();
 
@@ -37,6 +38,10 @@ const moduleRoutes: IModuleRoutes[] = [
   {
     path: '/sale',
     route: SaleRoutes,
+  },
+  {
+    path: '/meta',
+    route: MetaRoutes,
   },
 ];
 

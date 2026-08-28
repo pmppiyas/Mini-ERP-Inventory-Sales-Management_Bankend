@@ -22,8 +22,7 @@ export interface ISaleResponse {
 }
 
 export interface ICreateSalePayload {
-  id: string;
+  productId: string;
   quantity: number;
-  sellingPrice: number;
 }
 export interface ISaleDocument extends ISale, Document {}
